@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فاکتور فروش - ابزار گیت</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            direction: rtl;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 15px;
+        }
+
+        .controls button {
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 700;
+        }
+
+        #btn-image {
+            background-color: #1d6fa5;
+            color: white;
+        }
+        #btn-image:hover {
+            background-color: #165681;
+        }
+        
+        #btn-pdf {
+            background-color: #c0392b;
+            color: white;
+        }
+        #btn-pdf:hover {
+            background-color: #a93226;
+        }
+
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            font-size: 16px;
+            line-height: 24px;
+            color: #333;
+            background-color: #fff;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .header .logo-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .header .logo {
+            width: 70px;
+            height: 70px;
+            margin-left: 15px;
+        }
+        
+        .header .title-section h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #0056b3;
+        }
+        
+        .header .title-section p {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .header .invoice-details {
+            text-align: left;
+        }
+        
+        .invoice-details input {
+            font-family: 'Vazirmatn', sans-serif;
+            border: none;
+            border-bottom: 1px dashed #ccc;
+            text-align: left;
+            padding: 2px 5px;
+            width: 120px;
+        }
+
+        .customer-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .customer-info div {
+            display: flex;
+            align-items: center;
+        }
+
+        .customer-info label {
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .customer-info input {
+            font-family: 'Vazirmatn', sans-serif;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            padding: 5px;
+            width: 250px;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .items-table thead tr {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .items-table th, .items-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .items-table tbody tr:nth-child(even) {
+            background-color: #f7f9fc;
+        }
+        
+        .items-table input {
+            width: 95%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        .items-table .item-name-input {
+            text-align: right;
+        }
+
+        .items-table .price, .items-table .total-price {
+            direction: ltr;
+        }
+
+        .add-row-btn {
+            margin-top: 10px;
+            padding: 8px 15px;
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .add-row-btn:hover {
+            background-color: #218838;
+        }
+        .delete-row-btn {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .totals {
+            margin-top: 30px;
+            width: 50%;
+            margin-right: auto;
+            margin-left: 0;
+        }
+
+        .totals table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .totals td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+        .totals td:first-child {
+            font-weight: bold;
+            background-color: #f2f2f2;
+            width: 35%;
+        }
+        .totals input {
+            width: 50px;
+            border: none;
+            border-bottom: 1px dashed #333;
+            text-align: center;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 16px;
+        }
+        .totals .final-amount {
+            background-color: #e6f0ff;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #0056b3;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #0056b3;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .footer .address {
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .signature-area {
+            position: relative;
+            text-align: center;
+            width: 200px;
+        }
+
+        .signature-area .stamp {
+            position: absolute;
+            left: 50%;
+            top: -20px;
+            transform: translateX(-50%) rotate(-15deg);
+            width: 120px;
+            opacity: 0.75;
+            /* Filter to make it look like a blue stamp */
+            filter: sepia(1) saturate(5) hue-rotate(180deg) brightness(90%);
+        }
+        
+        .signature-area p {
+            border-top: 1px dotted #555;
+            padding-top: 5px;
+            margin-top: 70px;
+            font-weight: bold;
+        }
+        
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+            .controls, .add-row-btn, .delete-row-btn {
+                display: none;
+            }
+            .invoice-box {
+                box-shadow: none;
+                border: none;
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+             .items-table input {
+                border: none;
+             }
+             .customer-info input, .invoice-details input, .totals input {
+                border: none;
+                border-bottom: 1px solid #fff; /* Make it invisible */
+             }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <button id="btn-image">🖨️  خروجی عکس (PNG)</button>
+        <button id="btn-pdf">📄  خروجی PDF</button>
+    </div>
+
+    <div id="invoice-to-export" class="invoice-box">
+        <header class="header">
+            <div class="logo-title">
+                <img src="https://s6.uupload.ir/files/ابزارگیت_xcl4.png" alt="لوگو ابزار گیت" class="logo">
+                <div class="title-section">
+                    <h1>فاکتور فروش</h1>
+                    <p>فروشگاه انواع ابزارآلات عمده و تکی</p>
+                </div>
+            </div>
+            <div class="invoice-details">
+                <p>تاریخ: <input type="text" id="invoice-date" value="۱۴۰۳/۰۴/۰۹"></p>
+                <p>شماره فاکتور: <input type="text" id="invoice-number" value="۳۶۸۰۴"></p>
+            </div>
+        </header>
+
+        <section class="customer-info">
+            <div>
+                <label for="customer-name">خریدار:</label>
+                <input type="text" id="customer-name" placeholder="نام خریدار را وارد کنید">
+            </div>
+            <div>
+                <label for="customer-tel">شماره تماس:</label>
+                <input type="text" id="customer-tel" placeholder="شماره تماس خریدار">
+            </div>
+        </section>
+
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th style="width:5%">#</th>
+                    <th style="width:40%">نام کالا</th>
+                    <th style="width:10%">تعداد</th>
+                    <th style="width:15%">قیمت (تومان)</th>
+                    <th style="width:20%">قیمت نهایی (تومان)</th>
+                    <th style="width:5%"></th>
+                </tr>
+            </thead>
+            <tbody id="invoice-items">
+                </tbody>
+        </table>
+        
+        <button class="add-row-btn" onclick="addRow()">+ افزودن ردیف</button>
+
+        <section class="totals">
+            <table>
+                <tr>
+                    <td>جمع کل</td>
+                    <td id="subtotal" class="price">۰</td>
+                </tr>
+                <tr>
+                    <td>تخفیف (<input type="number" id="discount-percent" value="0" min="0" max="100">%)</td>
+                    <td id="discount-amount" class="price">۰</td>
+                </tr>
+                <tr class="final-amount">
+                    <td>مبلغ قابل پرداخت (تومان)</td>
+                    <td id="grand-total" class="price">۰</td>
+                </tr>
+            </table>
+        </section>
+        
+        <footer class="footer">
+            <div class="address">
+                <p><strong>آدرس:</strong> قم - خیابان سمیه - خیابان شهیدین - پلاک ۱۷</p>
+                <p><strong>شماره تلفن:</strong> ۰۹۳۰۵۹۱۷۱۶۹</p>
+            </div>
+            <div class="signature-area">
+                <img src="https://s6.uupload.ir/files/ابزارگیت_xcl4.png" class="stamp" alt="مهر">
+                <p>امضا فروشنده</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const itemsTableBody = document.getElementById('invoice-items');
+        const subtotalEl = document.getElementById('subtotal');
+        const discountPercentEl = document.getElementById('discount-percent');
+        const discountAmountEl = document.getElementById('discount-amount');
+        const grandTotalEl = document.getElementById('grand-total');
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('fa-IR').format(num);
+        }
+        
+        function parseFormattedNumber(str) {
+            if (!str) return 0;
+            // Convert Persian/Arabic digits to Western digits and remove commas
+            const westernNumber = str.replace(/[\u0660-\u0669\u06F0-\u06F9]/g, c => c.charCodeAt(0) & 0xf)
+                                     .replace(/٬|,/g, '');
+            return parseFloat(westernNumber) || 0;
+        }
+
+
+        function addRow(name = "", quantity = 1, price = 0) {
+            const rowCount = itemsTableBody.rows.length;
+            const newRow = itemsTableBody.insertRow(rowCount);
+            
+            newRow.innerHTML = `
+                <td>${rowCount + 1}</td>
+                <td><input type="text" class="item-name-input" placeholder="نام کالا یا خدمات..." value="${name}"></td>
+                <td><input type="number" class="quantity" value="${quantity}" min="1"></td>
+                <td><input type="text" class="price-input" value="${formatNumber(price)}"></td>
+                <td class="total-price price">۰</td>
+                <td><button class="delete-row-btn" onclick="deleteRow(this)">×</button></td>
+            `;
+            updateCalculations();
+        }
+        
+        function deleteRow(btn) {
+            const row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+            // Re-number rows
+            const rows = itemsTableBody.getElementsByTagName('tr');
+            for(let i=0; i < rows.length; i++) {
+                rows[i].getElementsByTagName('td')[0].innerText = i + 1;
+            }
+            updateCalculations();
+        }
+
+        function updateCalculations() {
+            let subtotal = 0;
+            const rows = itemsTableBody.getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const quantity = parseFloat(row.querySelector('.quantity').value) || 0;
+                const price = parseFormattedNumber(row.querySelector('.price-input').value);
+                const rowTotal = quantity * price;
+                row.querySelector('.total-price').textContent = formatNumber(rowTotal.toFixed(0));
+                subtotal += rowTotal;
+            }
+
+            const discountPercent = parseFloat(discountPercentEl.value) || 0;
+            const discountAmount = subtotal * (discountPercent / 100);
+            const grandTotal = subtotal - discountAmount;
+
+            subtotalEl.textContent = formatNumber(subtotal.toFixed(0));
+            discountAmountEl.textContent = formatNumber(discountAmount.toFixed(0));
+            grandTotalEl.textContent = formatNumber(grandTotal.toFixed(0));
+        }
+
+        itemsTableBody.addEventListener('input', (e) => {
+            if (e.target.classList.contains('quantity') || e.target.classList.contains('price-input')) {
+                // Auto-format price input with commas
+                if (e.target.classList.contains('price-input')) {
+                    const value = parseFormattedNumber(e.target.value);
+                    e.target.value = formatNumber(value);
+                }
+                updateCalculations();
+            }
+        });
+        
+        discountPercentEl.addEventListener('input', updateCalculations);
+
+        // Initial state
+        addRow("حک آرام بند ۸۰ کیلو برند اکو (EKO)", 5, 1275000);
+        addRow("هزینه ارسال (پست)", 1, 160000);
+        
+        // Export functionality
+        const exportArea = document.getElementById('invoice-to-export');
+        
+        document.getElementById('btn-pdf').addEventListener('click', () => {
+            const invoiceNumber = document.getElementById('invoice-number').value || 'invoice';
+            const opt = {
+                margin:       0.5,
+                filename:     `Factor-${invoiceNumber}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(exportArea).set(opt).save();
+        });
+
+        document.getElementById('btn-image').addEventListener('click', () => {
+            const invoiceNumber = document.getElementById('invoice-number').value || 'invoice';
+            html2canvas(exportArea, { scale: 2.5, useCORS: true }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Factor-${invoiceNumber}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        });
+
+    </script>
+</body>
+</html>
