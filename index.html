@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فاکتور فروش حرفه‌ای</title>
+    <title>فاکتور فروش - نسخه نهایی</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
 
         :root {
-            --primary-color: #0d6efd;
-            --secondary-color: #6c757d;
-            --bg-light: #f8f9fa;
-            --border-color: #dee2e6;
-            --text-dark: #212529;
+            --primary-color: #4A90E2; 
+            --secondary-color: #777;   
+            --bg-light: #fdfdfd;      
+            --border-color: #eaeaea;   
+            --text-dark: #333;         
         }
 
         body {
             font-family: 'Vazirmatn', sans-serif;
             direction: rtl;
-            background-color: #e9ecef;
+            background-color: #f4f6f9;
             margin: 0;
             padding: 2rem;
             color: var(--text-dark);
@@ -34,7 +34,7 @@
             background-color: #fff;
             padding: 1rem;
             border-radius: 0.5rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             margin-bottom: 2rem;
             display: flex;
             gap: 1rem;
@@ -56,425 +56,371 @@
         }
 
         #btn-print {
-            background-color: var(--primary-color);
+            background-color: var(--secondary-color);
             color: white;
         }
         #btn-print:hover {
-            background-color: #0b5ed7;
+            background-color: #666;
         }
 
         #btn-image {
-            background-color: #198754;
+            background-color: var(--primary-color);
             color: white;
         }
         #btn-image:hover {
-            background-color: #157347;
+            background-color: #357ABD;
         }
 
         .invoice-wrapper {
             background: #fff;
-            padding: 2.5rem;
+            padding: 2.5rem; /* کاهش پدینگ کلی */
             border-radius: 0.5rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .invoice-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            max-width: 400px;
+            opacity: 0.06;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .invoice-content {
+            position: relative;
+            z-index: 2; 
         }
 
         .invoice-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-bottom: 2px solid var(--border-color);
             padding-bottom: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem; /* کاهش فاصله */
         }
 
-        .company-details {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .company-details img {
-            width: 60px;
-            height: 60px;
-        }
-        .company-details h2 {
-            margin: 0;
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-        .company-details p {
-            margin: 0;
-            color: var(--secondary-color);
-        }
+        .company-details { display: flex; align-items: center; gap: 1rem; }
+        .company-details img { width: 60px; height: 60px; }
+        .company-details h1 { margin: 0; font-size: 1.8rem; font-weight: 700; color: var(--text-dark); }
+        .company-details p { margin: 0; color: var(--secondary-color); }
 
         .invoice-meta {
             text-align: left;
             min-width: 220px;
+            border-right: 3px solid var(--primary-color);
+            padding-right: 1rem;
         }
-        .meta-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-        .meta-item label {
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-        .meta-item input {
-            font-family: inherit;
-            border: none;
-            text-align: left;
-            padding: 0;
-            background: transparent;
-            width: 120px;
-        }
-
+        .meta-item { display: flex; justify-content: space-between; margin-bottom: 0.75rem; }
+        .meta-item label { font-weight: 500; color: var(--secondary-color); }
+        .meta-item span { font-weight: 700; }
+        
         .customer-info {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 0.3rem;
+            padding: 1.25rem; /* کاهش پدینگ */
             margin-bottom: 2rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem; /* کاهش فاصله سطرها */
         }
+        .info-row { display: flex; gap: 1.5rem; }
+        .info-item { display: flex; align-items: center; gap: 1rem; flex-grow: 1; }
         .customer-info label {
             font-weight: 700;
-            margin-left: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            flex-shrink: 0; 
+            min-width: 80px;
         }
         .customer-info input {
             font-family: inherit;
-            border: none;
-            border-bottom: 1px dashed var(--secondary-color);
-            padding: 0.25rem;
-            background: transparent;
-            width: 300px;
-        }
-
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .items-table thead {
-            background-color: var(--bg-light);
-        }
-        .items-table th {
-            padding: 0.75rem 1rem;
-            text-align: right;
-            font-weight: 700;
-            border-bottom: 2px solid var(--border-color);
-        }
-        .items-table td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid var(--border-color);
-            vertical-align: middle;
-        }
-        .items-table th:nth-child(1), .items-table td:nth-child(1) { text-align: center; } /* # */
-        .items-table th:nth-child(3), .items-table td:nth-child(3) { text-align: center; } /* Qty */
-
-        .items-table input {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--border-color);
+            border: 1px solid #ccc;
             border-radius: 0.25rem;
-            font-family: inherit;
-            box-sizing: border-box;
-        }
-        .items-table .price-display {
-            direction: ltr;
-            text-align: left;
-        }
-        .delete-row-btn {
-            background: none; border: none; color: #dc3545; cursor: pointer; font-size: 1.25rem;
+            padding: 0.5rem;
+            background: #fff;
+            width: 100%;
         }
         
-        .actions-row {
-            padding-top: 1rem;
+        .items-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+        .items-table thead tr { background-color: var(--primary-color); color: white; }
+        .items-table th { padding: 0.6rem 1rem; text-align: right; font-weight: 500; } /* کاهش پدینگ */
+        .items-table td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; } /* کاهش پدینگ */
+        .items-table tr:last-child td { border-bottom: none; }
+        
+        .items-table th:nth-child(1), .items-table td:nth-child(1) { text-align: center; } 
+        .items-table th:nth-child(3), .items-table td:nth-child(3) { text-align: center; } 
+        
+        .items-table input {
+            width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem;
+            font-family: inherit; box-sizing: border-box; text-align: center;
         }
-        .add-row-btn {
-            font-family: inherit;
-            background-color: #198754;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.25rem;
-            cursor: pointer;
-        }
+        .items-table .item-name-input { text-align: right; }
+        .items-table .price-display { direction: ltr; text-align: left; }
 
-        .invoice-summary {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 2rem;
+        .delete-row-btn { background: none; border: none; color: #ff4d4d; cursor: pointer; font-size: 1.25rem; }
+        .add-row-btn {
+            font-family: inherit; background-color: transparent; color: var(--primary-color); border: 1px dashed var(--primary-color);
+            padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer; transition: all 0.2s ease;
         }
-        .totals-table {
-            width: 45%;
-            min-width: 300px;
-        }
-        .totals-table td {
-            padding: 0.75rem 1rem;
-        }
-        .totals-table tr td:first-child {
-            font-weight: 500;
-            color: var(--secondary-color);
-        }
-        .totals-table tr td:last-child {
-            text-align: left;
-            direction: ltr;
-            font-weight: 700;
-        }
-        .totals-table #discount-percent-input {
-            width: 40px;
-            border: none;
-            border-bottom: 1px dashed var(--secondary-color);
-            text-align: center;
-            font-family: inherit;
-        }
-        .totals-table .grand-total-row td {
-            border-top: 2px solid var(--text-dark);
-            font-size: 1.25rem;
-            color: var(--text-dark);
+        .add-row-btn:hover { background-color: rgba(74, 144, 226, 0.1); }
+        
+        .invoice-summary { display: flex; justify-content: flex-end; margin-top: 2rem; }
+        .totals-table { width: 45%; min-width: 300px; }
+        .totals-table td { padding: 0.6rem 1rem; } /* کاهش پدینگ */
+        .totals-table tr td:first-child { font-weight: 500; color: var(--secondary-color); }
+        .totals-table tr td:last-child { text-align: left; direction: ltr; font-weight: 700; }
+        #discount-percent-input { width: 40px; border: 1px solid #ccc; text-align: center; font-family: inherit; border-radius: 0.25rem;}
+        
+        .grand-total-row td {
+            border-top: 2px solid var(--text-dark); font-size: 1.25rem; color: var(--text-dark);
+            padding-top: 1rem !important;
         }
         
         .invoice-footer {
-            margin-top: 3rem;
-            padding-top: 1.5rem;
-            border-top: 2px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+            margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: flex-end; position: relative;
         }
-        .footer-note {
-            font-size: 0.9rem;
-            color: var(--secondary-color);
+        .footer-note { font-size: 0.9rem; color: var(--secondary-color); }
+        .signature-area { text-align: center; width: 250px; }
+        .stamp {
+            position: absolute; width: 120px; bottom: 40px; left: 60px;
+            opacity: 0.7; transform: rotate(-12deg);
         }
-        .signature-area {
-            position: relative;
-            text-align: center;
-            width: 250px;
-        }
-        .signature-area .stamp {
-            position: absolute;
-            width: 130px;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%) rotate(-14deg);
-            opacity: 0.6;
-            filter: sepia(1) saturate(4) hue-rotate(180deg) brightness(95%);
-        }
-        .signature-area p {
-            padding-top: 4rem;
-            border-top: 1px solid var(--secondary-color);
-        }
+        .signature-area p { margin-top: 2rem; padding-top: 0.5rem; border-top: 1px solid var(--secondary-color); }
 
-        /* --- STYLES FOR PRINTING --- */
         @media print {
-            body {
-                background-color: #fff;
-                padding: 0;
-            }
-            .controls, .delete-row-btn, .add-row-btn {
-                display: none;
-            }
-            .container {
-                max-width: 100%;
-                margin: 0;
-            }
-            .invoice-wrapper {
-                box-shadow: none;
-                border-radius: 0;
-                padding: 0;
-            }
-            .items-table input, .customer-info input, .meta-item input, #discount-percent-input {
-                border: none;
-                background: transparent;
-            }
-            .stamp {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
+            body { background-color: #fff; padding: 0; }
+            .controls, .delete-row-btn, .add-row-btn { display: none; }
+            .container { max-width: 100%; margin: 0; }
+            .invoice-wrapper { box-shadow: none; border: none; padding: 1cm !important; }
+            .items-table input, .customer-info input, #discount-percent-input { border-color: transparent; }
+            .customer-info { padding: 0.75rem !important; gap: 0.5rem !important; margin-bottom: 1.5rem; }
+            .items-table th { padding: 5px 8px !important; }
+            .items-table td { padding: 5px 8px !important; }
+            .invoice-summary { margin-top: 1.5rem; }
+            .totals-table td { padding: 5px 8px !important; }
+            .invoice-footer { margin-top: 2rem; }
+            .stamp, .invoice-watermark { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
     </style>
 </head>
 <body>
+    <script>
+        const logoBase64 = "data:image/png;base64,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";
+    </script>
 
     <div class="container">
         <div class="controls">
-            <button id="btn-print" class="btn">🖨️ چاپ / ذخیره PDF</button>
+            <button id="btn-print" class="btn">🖨️ چاپ / ذخیره PDF (روش مطمئن)</button>
             <button id="btn-image" class="btn">🖼️ خروجی عکس (PNG)</button>
         </div>
 
         <div id="invoice-to-export" class="invoice-wrapper">
-            <header class="invoice-header">
-                <div class="company-details">
-                    <img src="https://s6.uupload.ir/files/ابزارگیت_xcl4.png" alt="لوگو">
-                    <div>
-                        <h2>ابزار گیت</h2>
-                        <p>فروشگاه انواع ابزارآلات عمده و تکی</p>
+            <img id="watermark-logo" class="invoice-watermark" alt="Watermark">
+            <div class="invoice-content">
+                <header class="invoice-header">
+                    <div class="company-details">
+                        <img id="header-logo" alt="لوگو">
+                        <div>
+                            <h1>ابزار گیت</h1>
+                            <p>فروشگاه انواع ابزارآلات عمده و تکی</p>
+                        </div>
                     </div>
-                </div>
-                <div class="invoice-meta">
-                    <div class="meta-item">
-                        <label>شماره فاکتور:</label>
-                        <input type="text" id="invoice-number" value="۳۶۸۰۴">
+                    <div class="invoice-meta">
+                        <div class="meta-item">
+                            <label>شماره فاکتور:</label>
+                            <span>۳۶۸۰۴</span>
+                        </div>
+                        <div class="meta-item">
+                            <label>تاریخ:</label>
+                            <span>۱۴۰۳/۰۴/۰۹</span>
+                        </div>
                     </div>
-                    <div class="meta-item">
-                        <label>تاریخ:</label>
-                        <input type="text" id="invoice-date" value="۱۴۰۳/۰۴/۰۹">
+                </header>
+
+                <section class="customer-info">
+                    <div class="info-row">
+                        <div class="info-item">
+                            <label>نام خریدار:</label>
+                            <input type="text" placeholder="نام و نام خانوادگی">
+                        </div>
+                         <div class="info-item">
+                            <label>شماره تماس:</label>
+                            <input type="text" placeholder="۰۹۱۲xxxxxxx">
+                        </div>
                     </div>
-                </div>
-            </header>
+                    <div class="info-row">
+                        <div class="info-item">
+                            <label>آدرس:</label>
+                            <input type="text" placeholder="شهر، خیابان، کوچه، پلاک">
+                        </div>
+                    </div>
+                </section>
 
-            <section class="customer-info">
-                <label>خریدار محترم:</label>
-                <input type="text" placeholder="نام و نام خانوادگی خریدار را وارد کنید">
-            </section>
-
-            <table class="items-table">
-                <thead>
-                    <tr>
-                        <th style="width: 5%;">#</th>
-                        <th style="width: 45%;">شرح کالا / خدمات</th>
-                        <th style="width: 10%;">تعداد</th>
-                        <th style="width: 20%; text-align:left;">قیمت واحد (تومان)</th>
-                        <th style="width: 20%; text-align:left;">مبلغ کل (تومان)</th>
-                    </tr>
-                </thead>
-                <tbody id="invoice-items">
-                    </tbody>
-                <tfoot>
-                    <tr class="actions-row">
-                        <td colspan="5">
-                            <button class="add-row-btn" onclick="addRow()">+ افزودن ردیف جدید</button>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-
-            <div class="invoice-summary">
-                <table class="totals-table">
-                    <tr>
-                        <td>جمع کل</td>
-                        <td id="subtotal">۰</td>
-                    </tr>
-                    <tr>
-                        <td>تخفیف (<input type="number" id="discount-percent-input" value="0" min="0">%)</td>
-                        <td id="discount-amount">۰</td>
-                    </tr>
-                    <tr class="grand-total-row">
-                        <td>مبلغ قابل پرداخت</td>
-                        <td id="grand-total">۰</td>
-                    </tr>
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">#</th>
+                            <th style="width: 45%;">شرح کالا / خدمات</th>
+                            <th style="width: 10%;">تعداد</th>
+                            <th style="width: 20%; text-align:left;">قیمت واحد</th>
+                            <th style="width: 20%; text-align:left;">مبلغ کل (تومان)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoice-items"></tbody>
                 </table>
-            </div>
+                 <button class="add-row-btn" onclick="addRow()">+ افزودن ردیف جدید</button>
 
-            <footer class="invoice-footer">
-                <div class="footer-note">
-                    <p><strong>آدرس:</strong> قم - خیابان سمیه - خیابان شهیدین - پلاک ۱۷</p>
-                    <p><strong>شماره تلفن:</strong> ۰۹۳۰۵۹۱۷۱۶۹</p>
+                <div class="invoice-summary">
+                    <table class="totals-table">
+                        <tr>
+                            <td>جمع کل</td>
+                            <td id="subtotal">۰</td>
+                        </tr>
+                        <tr>
+                            <td>تخفیف (<input type="number" id="discount-percent-input" value="0" min="0">%)</td>
+                            <td id="discount-amount">۰</td>
+                        </tr>
+                        <tr class="grand-total-row">
+                            <td>مبلغ قابل پرداخت</td>
+                            <td id="grand-total">۰</td>
+                        </tr>
+                    </table>
                 </div>
-                <div class="signature-area">
-                    <img src="https://s6.uupload.ir/files/ابزارگیت_xcl4.png" class="stamp" alt="مهر">
-                    <p>مهر و امضای فروشنده</p>
-                </div>
-            </footer>
+
+                <footer class="invoice-footer">
+                    <div class="footer-note">
+                        <p><strong>آدرس:</strong> قم - خیابان سمیه - خیابان شهیدین - پلاک ۱۷</p>
+                        <p><strong>شماره تلفن:</strong> ۰۹۳۰۵۹۱۷۱۶۹</p>
+                    </div>
+                     <img id="stamp-logo" class="stamp" alt="مهر">
+                    <div class="signature-area">
+                        <p>مهر و امضای فروشنده</p>
+                    </div>
+                </footer>
+            </div>
         </div>
     </div>
 
     <script>
-        const itemsBody = document.getElementById('invoice-items');
-        const discountInput = document.getElementById('discount-percent-input');
-        
-        // Helper to format numbers with commas
-        const formatCurrency = (num) => new Intl.NumberFormat('fa-IR').format(num);
-        
-        // Helper to parse numbers, removing commas and converting Persian digits
-        const parseNumber = (str) => {
-            if (typeof str !== 'string') return 0;
-            const val = str.replace(/٬|,/g, '').replace(/[\u0660-\u0669\u06F0-\u06F9]/g, c => c.charCodeAt(0) & 0xf);
-            return parseFloat(val) || 0;
-        };
+        document.addEventListener('DOMContentLoaded', () => {
+            // ** اصلاحیه مهم: این کد تضمین می‌کند که لوگوها همیشه بارگیری شوند **
+            document.getElementById('header-logo').src = logoBase64;
+            document.getElementById('watermark-logo').src = logoBase64;
+            document.getElementById('stamp-logo').src = logoBase64;
 
-        function calculateAll() {
-            let subtotal = 0;
-            const rows = itemsBody.querySelectorAll('tr');
+            const itemsBody = document.getElementById('invoice-items');
+            const discountInput = document.getElementById('discount-percent-input');
+            
+            const formatCurrency = (num) => new Intl.NumberFormat('fa-IR').format(num);
+            const parseNumber = (str) => {
+                if (typeof str !== 'string') return 0;
+                const val = str.replace(/٬|,/g, '').replace(/[\u0660-\u0669\u06F0-\u06F9]/g, c => c.charCodeAt(0) & 0xf);
+                return parseFloat(val) || 0;
+            };
 
-            rows.forEach(row => {
-                const quantity = parseNumber(row.querySelector('.quantity-input').value);
-                const price = parseNumber(row.querySelector('.price-input').value);
-                const rowTotal = quantity * price;
-                row.querySelector('.row-total').textContent = formatCurrency(rowTotal);
-                subtotal += rowTotal;
-            });
+            window.calculateAll = function() {
+                let subtotal = 0;
+                const rows = itemsBody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const quantity = parseNumber(row.querySelector('.quantity-input').value);
+                    const price = parseNumber(row.querySelector('.price-input').value);
+                    const rowTotal = quantity * price;
+                    row.querySelector('.row-total').textContent = formatCurrency(rowTotal);
+                    subtotal += rowTotal;
+                });
 
-            const discountPercent = parseNumber(discountInput.value);
-            const discountAmount = subtotal * (discountPercent / 100);
-            const grandTotal = subtotal - discountAmount;
+                const discountPercent = parseNumber(discountInput.value);
+                const discountAmount = subtotal * (discountPercent / 100);
+                const grandTotal = subtotal - discountAmount;
 
-            document.getElementById('subtotal').textContent = formatCurrency(subtotal);
-            document.getElementById('discount-amount').textContent = `- ${formatCurrency(discountAmount)}`;
-            document.getElementById('grand-total').textContent = formatCurrency(grandTotal);
-        }
+                document.getElementById('subtotal').textContent = formatCurrency(subtotal);
+                document.getElementById('discount-amount').textContent = `- ${formatCurrency(discountAmount)}`;
+                document.getElementById('grand-total').textContent = formatCurrency(grandTotal);
+            }
 
-        function addRow(name = "", quantity = 1, price = 0) {
-            const rowCount = itemsBody.rows.length;
-            const newRow = itemsBody.insertRow();
-            newRow.innerHTML = `
-                <td>${rowCount + 1}</td>
-                <td><input type="text" class="item-name-input" placeholder="شرح کالا..." value="${name}"></td>
-                <td><input type="number" class="quantity-input" value="${quantity}" min="1"></td>
-                <td class="price-display"><input type="text" class="price-input" value="${formatCurrency(price)}"></td>
-                <td class="price-display row-total">${formatCurrency(price * quantity)}</td>
-                <td style="text-align:center; padding:0;"><button class="delete-row-btn" onclick="this.closest('tr').remove(); calculateAll();">✖</button></td>
-            `;
-            calculateAll();
-        }
+            window.renumberRows = function() {
+                const rows = itemsBody.querySelectorAll('tr');
+                rows.forEach((row, index) => {
+                    row.querySelector('td:first-child').textContent = index + 1;
+                });
+            }
 
-        // Event Delegation for dynamic rows
-        itemsBody.addEventListener('input', e => {
-            const target = e.target;
-            if (target.classList.contains('quantity-input') || target.classList.contains('price-input')) {
-                // Auto-format price input as user types
-                if (target.classList.contains('price-input')) {
-                    const cursorPos = target.selectionStart;
-                    const originalLength = target.value.length;
-                    const rawValue = parseNumber(target.value);
-                    target.value = formatCurrency(rawValue);
-                    const newLength = target.value.length;
-                    target.selectionStart = cursorPos + (newLength - originalLength);
-                    target.selectionEnd = cursorPos + (newLength - originalLength);
-                }
+            window.addRow = function(name = "", quantity = 1, price = 0) {
+                const newRow = itemsBody.insertRow();
+                newRow.innerHTML = `
+                    <td></td>
+                    <td><input type="text" class="item-name-input" placeholder="شرح کالا..." value="${name}"></td>
+                    <td><input type="number" class="quantity-input" value="${quantity}" min="1"></td>
+                    <td><input type="text" class="price-input" value="${formatCurrency(price)}"></td>
+                    <td class="price-display row-total">${formatCurrency(price * quantity)}</td>
+                    <td style="text-align:center; padding:0;"><button class="delete-row-btn" onclick="this.closest('tr').remove(); renumberRows(); calculateAll();">✖</button></td>
+                `;
+                renumberRows();
                 calculateAll();
             }
-        });
-        
-        discountInput.addEventListener('input', calculateAll);
 
-        // --- EXPORT BUTTONS ---
-        document.getElementById('btn-print').addEventListener('click', () => {
-            window.print();
-        });
-
-        document.getElementById('btn-image').addEventListener('click', () => {
-            const exportArea = document.getElementById('invoice-to-export');
-            const invoiceNumber = document.getElementById('invoice-number').value || 'invoice';
-            html2canvas(exportArea, {
-                scale: 2.5, // Higher scale for better quality
-                useCORS: true,
-                logging: true,
-                allowTaint: true
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `Factor-${invoiceNumber}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            }).catch(err => {
-                console.error("خطا در ایجاد عکس:", err);
-                alert("متاسفانه در ایجاد خروجی عکس مشکلی پیش آمد. لطفا از گزینه چاپ/ذخیره PDF استفاده کنید.");
+            itemsBody.addEventListener('input', e => {
+                const target = e.target;
+                if (target.classList.contains('quantity-input') || target.classList.contains('price-input')) {
+                    if (target.classList.contains('price-input')) {
+                        const cursorPos = target.selectionStart;
+                        const originalLength = target.value.length;
+                        const rawValue = parseNumber(target.value);
+                        target.value = formatCurrency(rawValue);
+                        const newLength = target.value.length;
+                        if(cursorPos !== null) {
+                           target.selectionStart = target.selectionEnd = cursorPos + (newLength - originalLength);
+                        }
+                    }
+                    calculateAll();
+                }
             });
-        });
+            
+            discountInput.addEventListener('input', calculateAll);
 
-        // Add initial rows to demonstrate
-        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('btn-print').addEventListener('click', () => { window.print(); });
+
+            document.getElementById('btn-image').addEventListener('click', () => {
+                const exportNode = document.getElementById('invoice-to-export');
+                const button = document.getElementById('btn-image');
+                button.textContent = 'در حال ساخت عکس...';
+                button.disabled = true;
+
+                html2canvas(exportNode, {
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    scale: 2.5 // افزایش کیفیت عکس خروجی
+                })
+                .then(function (canvas) {
+                    const link = document.createElement('a');
+                    link.download = 'factor-abzargit.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    button.textContent = '🖼️ خروجی عکس (PNG)';
+                    button.disabled = false;
+                })
+                .catch(function (error) {
+                    console.error('خطای جدی در ساخت تصویر:', error);
+                    alert('متاسفانه ساخت عکس با خطا مواجه شد. این مشکل معمولا به دلیل محدودیت‌های امنیتی مرورگر است. لطفا از روش اصلی و مطمئن "چاپ / ذخیره PDF" استفاده کنید.');
+                    button.textContent = '🖼️ خروجی عکس (PNG)';
+                    button.disabled = false;
+                });
+            });
+
+            // افزودن سطرهای پیش‌فرض
             addRow("حک آرام بند ۸۰ کیلو برند اکو (EKO)", 5, 1275000);
             addRow("هزینه ارسال (پست)", 1, 160000);
         });
-
     </script>
 </body>
 </html>
