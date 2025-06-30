@@ -73,7 +73,7 @@
 
         .invoice-wrapper {
             background: #fff;
-            padding: 2.5rem; /* کاهش پدینگ کلی */
+            padding: 2.5rem; 
             border-radius: 0.5rem;
             border: 1px solid var(--border-color);
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
@@ -103,7 +103,7 @@
             justify-content: space-between;
             align-items: flex-start;
             padding-bottom: 1.5rem;
-            margin-bottom: 1.5rem; /* کاهش فاصله */
+            margin-bottom: 1.5rem;
         }
 
         .company-details { display: flex; align-items: center; gap: 1rem; }
@@ -125,11 +125,11 @@
             background-color: var(--bg-light);
             border: 1px solid var(--border-color);
             border-radius: 0.3rem;
-            padding: 1.25rem; /* کاهش پدینگ */
+            padding: 1.25rem;
             margin-bottom: 2rem;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem; /* کاهش فاصله سطرها */
+            gap: 0.5rem; 
         }
         .info-row { display: flex; gap: 1.5rem; }
         .info-item { display: flex; align-items: center; gap: 1rem; flex-grow: 1; }
@@ -151,8 +151,8 @@
         
         .items-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
         .items-table thead tr { background-color: var(--primary-color); color: white; }
-        .items-table th { padding: 0.6rem 1rem; text-align: right; font-weight: 500; } /* کاهش پدینگ */
-        .items-table td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; } /* کاهش پدینگ */
+        .items-table th { padding: 0.6rem 1rem; text-align: right; font-weight: 500; } 
+        .items-table td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
         .items-table tr:last-child td { border-bottom: none; }
         
         .items-table th:nth-child(1), .items-table td:nth-child(1) { text-align: center; } 
@@ -174,7 +174,7 @@
         
         .invoice-summary { display: flex; justify-content: flex-end; margin-top: 2rem; }
         .totals-table { width: 45%; min-width: 300px; }
-        .totals-table td { padding: 0.6rem 1rem; } /* کاهش پدینگ */
+        .totals-table td { padding: 0.6rem 1rem; } 
         .totals-table tr td:first-child { font-weight: 500; color: var(--secondary-color); }
         .totals-table tr td:last-child { text-align: left; direction: ltr; font-weight: 700; }
         #discount-percent-input { width: 40px; border: 1px solid #ccc; text-align: center; font-family: inherit; border-radius: 0.25rem;}
@@ -202,9 +202,9 @@
             .container { max-width: 100%; margin: 0; }
             .invoice-wrapper { box-shadow: none; border: none; padding: 1cm !important; }
             .items-table input, .customer-info input, #discount-percent-input { border-color: transparent; }
-            .customer-info { padding: 0.75rem !important; gap: 0.5rem !important; margin-bottom: 1.5rem; }
-            .items-table th { padding: 5px 8px !important; }
-            .items-table td { padding: 5px 8px !important; }
+            .customer-info { padding: 0.75rem !important; gap: 5px !important; margin-bottom: 1.5rem; } 
+            .items-table th { padding: 4px 8px !important; } 
+            .items-table td { padding: 4px 8px !important; }
             .invoice-summary { margin-top: 1.5rem; }
             .totals-table td { padding: 5px 8px !important; }
             .invoice-footer { margin-top: 2rem; }
@@ -213,9 +213,6 @@
     </style>
 </head>
 <body>
-    <script>
-        const logoBase64 = "data:image/png;base64,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";
-    </script>
 
     <div class="container">
         <div class="controls">
@@ -224,11 +221,11 @@
         </div>
 
         <div id="invoice-to-export" class="invoice-wrapper">
-            <img id="watermark-logo" class="invoice-watermark" alt="Watermark">
+            <img class="invoice-watermark" alt="Watermark" src="https://s6.uupload.ir/files/ابزارگیت_n1z2.png" crossorigin="anonymous">
             <div class="invoice-content">
                 <header class="invoice-header">
                     <div class="company-details">
-                        <img id="header-logo" alt="لوگو">
+                        <img alt="لوگو" src="https://s6.uupload.ir/files/ابزارگیت_n1z2.png" crossorigin="anonymous">
                         <div>
                             <h1>ابزار گیت</h1>
                             <p>فروشگاه انواع ابزارآلات عمده و تکی</p>
@@ -301,7 +298,7 @@
                         <p><strong>آدرس:</strong> قم - خیابان سمیه - خیابان شهیدین - پلاک ۱۷</p>
                         <p><strong>شماره تلفن:</strong> ۰۹۳۰۵۹۱۷۱۶۹</p>
                     </div>
-                     <img id="stamp-logo" class="stamp" alt="مهر">
+                     <img class="stamp" alt="مهر" src="https://s6.uupload.ir/files/ابزارگیت_n1z2.png" crossorigin="anonymous">
                     <div class="signature-area">
                         <p>مهر و امضای فروشنده</p>
                     </div>
@@ -312,11 +309,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // ** اصلاحیه مهم: این کد تضمین می‌کند که لوگوها همیشه بارگیری شوند **
-            document.getElementById('header-logo').src = logoBase64;
-            document.getElementById('watermark-logo').src = logoBase64;
-            document.getElementById('stamp-logo').src = logoBase64;
-
             const itemsBody = document.getElementById('invoice-items');
             const discountInput = document.getElementById('discount-percent-input');
             
@@ -396,10 +388,10 @@
                 button.disabled = true;
 
                 html2canvas(exportNode, {
-                    useCORS: true,
+                    useCORS: true, 
                     allowTaint: true,
                     backgroundColor: '#ffffff',
-                    scale: 2.5 // افزایش کیفیت عکس خروجی
+                    scale: 2.5 
                 })
                 .then(function (canvas) {
                     const link = document.createElement('a');
@@ -411,7 +403,7 @@
                 })
                 .catch(function (error) {
                     console.error('خطای جدی در ساخت تصویر:', error);
-                    alert('متاسفانه ساخت عکس با خطا مواجه شد. این مشکل معمولا به دلیل محدودیت‌های امنیتی مرورگر است. لطفا از روش اصلی و مطمئن "چاپ / ذخیره PDF" استفاده کنید.');
+                    alert('متاسفانه ساخت عکس با خطا مواجه شد. این مشکل معمولا به دلیل محدودیت‌های امنیتی مرورگر هنگام استفاده از عکس‌های اینترنتی است. لطفا از روش اصلی و مطمئن "چاپ / ذخیره PDF" استفاده کنید.');
                     button.textContent = '🖼️ خروجی عکس (PNG)';
                     button.disabled = false;
                 });
