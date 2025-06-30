@@ -195,6 +195,17 @@
             opacity: 0.7; transform: rotate(-12deg);
         }
         .signature-area p { margin-top: 2rem; padding-top: 0.5rem; border-top: 1px solid var(--secondary-color); }
+        
+        /* استایل‌های مخصوص حالت عکس گرفتن */
+        .export-mode .delete-row-btn,
+        .export-mode .add-row-btn {
+            display: none;
+        }
+
+        .export-mode input {
+            border-color: transparent !important;
+            background-color: transparent !important;
+        }
 
         @media print {
             body { background-color: #fff; padding: 0; }
@@ -387,6 +398,9 @@
                 button.textContent = 'در حال ساخت عکس...';
                 button.disabled = true;
 
+                // اعمال کلاس موقتی برای شبیه‌سازی حالت چاپ
+                exportNode.classList.add('export-mode');
+
                 html2canvas(exportNode, {
                     useCORS: true, 
                     allowTaint: true,
@@ -398,18 +412,19 @@
                     link.download = 'factor-abzargit.png';
                     link.href = canvas.toDataURL('image/png');
                     link.click();
-                    button.textContent = '🖼️ خروجی عکس (PNG)';
-                    button.disabled = false;
                 })
                 .catch(function (error) {
                     console.error('خطای جدی در ساخت تصویر:', error);
-                    alert('متاسفانه ساخت عکس با خطا مواجه شد. این مشکل معمولا به دلیل محدودیت‌های امنیتی مرورگر هنگام استفاده از عکس‌های اینترنتی است. لطفا از روش اصلی و مطمئن "چاپ / ذخیره PDF" استفاده کنید.');
+                    alert('متاسفانه ساخت عکس با خطا مواجه شد. لطفا از روش اصلی و مطمئن "چاپ / ذخیره PDF" استفاده کنید.');
+                })
+                .finally(() => {
+                    // **مهم:** حذف کلاس موقتی برای بازگشت به حالت ویرایش
+                    exportNode.classList.remove('export-mode');
                     button.textContent = '🖼️ خروجی عکس (PNG)';
                     button.disabled = false;
                 });
             });
 
-            // افزودن سطرهای پیش‌فرض
             addRow("حک آرام بند ۸۰ کیلو برند اکو (EKO)", 5, 1275000);
             addRow("هزینه ارسال (پست)", 1, 160000);
         });
