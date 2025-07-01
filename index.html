@@ -125,28 +125,30 @@
             background-color: var(--bg-light);
             border: 1px solid var(--border-color);
             border-radius: 0.3rem;
-            padding: 1.25rem;
-            margin-bottom: 2rem;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem; 
+            gap: 0.2rem; 
+
         }
         .info-row { display: flex; gap: 1.5rem; }
-        .info-item { display: flex; align-items: center; gap: 1rem; flex-grow: 1; }
+        .info-item { display: flex; align-items: center; gap: 0.5rem; flex-grow: 1; }
         .customer-info label {
-            font-weight: 700;
+            font-weight: 500;
             font-size: 0.9rem;
             color: var(--text-dark);
             flex-shrink: 0; 
-            min-width: 80px;
+            min-width: 10px;
         }
         .customer-info input {
             font-family: inherit;
-            border: 1px solid #ccc;
+            border: 0.5px solid #ccc;
             border-radius: 0.25rem;
-            padding: 0.5rem;
+            padding: 0.2rem;
             background: #fff;
             width: 100%;
+	      text-align: right;    /* راست‌چین کردن برچسب‌ها */
         }
         
         .items-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
@@ -249,7 +251,8 @@
                         </div>
                         <div class="meta-item">
                             <label>تاریخ:</label>
-                            <span>۱۴۰۳/۰۴/۰۹</span>
+
+                           	 <span><p id="d"></p><script> d=new Date();d=new Intl.DateTimeFormat("fa-IR").format(d);document.getElementById("d").innerText=d; </script> </span>
                         </div>
                     </div>
                 </header>
@@ -306,8 +309,8 @@
 
                 <footer class="invoice-footer">
                     <div class="footer-note">
-                        <p><strong>آدرس:</strong> قم - خیابان سمیه - خیابان شهیدین - پلاک ۱۷</p>
-                        <p><strong>شماره تلفن:</strong> ۰۹۳۰۵۹۱۷۱۶۹</p>
+                        <p><strong>آدرس:</strong> قم- خیابان سمیه- بین کوچه۱۶و۱۸- پلاک۱۶</p>
+                        <p><strong>شماره تلفن:</strong> ۰۹۳۰۵۹۱۶۱۴۶</p>
                     </div>
                      <img class="stamp" alt="مهر" src="https://s6.uupload.ir/files/%D8%A7%D8%A8%D8%B2%D8%A7%D8%B1%DA%AF%DB%8C%D8%AA_xcl4.png" crossorigin="anonymous">
                     <div class="signature-area">
@@ -425,7 +428,7 @@
                 });
             });
 
-            addRow("جک آرام بند ۸۰ کیلو برند اکو (EKO)", 5, 1275000);
+            addRow("حک آرام بند ۸۰ کیلو برند اکو (EKO)", 5, 1275000);
             addRow("هزینه ارسال (پست)", 1, 160000);
         });
     </script>
